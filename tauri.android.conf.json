@@ -1,0 +1,13 @@
+{
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "Restro Pro POS",
+        "url": "http://app.localhost/index.html",
+        "visible": false,
+        "dragDropEnabled": false
+      }
+    ]
+  }
+}
