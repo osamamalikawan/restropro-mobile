@@ -1,0 +1,31 @@
+name: Android APK
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Point NDK_HOME at the runner's NDK
+        run: echo "NDK_HOME=$ANDROID_NDK_HOME" >> $GITHUB_ENV
+
+      - run: cargo install tauri-cli --version "^2" --locked
+      - run: cargo tauri android init --ci
+      - run: cargo tauri android build --apk --debug --target aarch64
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: restropro-apk
+          path: gen/android/app/build/outputs/apk/**/*.apk
