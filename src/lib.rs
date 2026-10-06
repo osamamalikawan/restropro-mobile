@@ -23,7 +23,7 @@ mod usb_print;
 #[cfg(not(target_os = "android"))]
 mod serial_print;
 #[cfg(target_os = "android")]
-#[path = "serial_print_stub.rs"]
+#[path = "serial_print_android.rs"]
 mod serial_print;
 
 // Windows print spooler (USB printers by Windows name). Other platforms get stubs.
@@ -114,7 +114,12 @@ fn text_response(status: u16, body: &str) -> tauri::http::Response<Vec<u8>> {
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    tauri::Builder::default()
+    let builder = tauri::Builder::default();
+    // Classic-Bluetooth printing (Android only; Windows uses the COM port instead).
+    #[cfg(target_os = "android")]
+    let builder = builder.plugin(tauri_plugin_bt_printer::init());
+
+    builder
         .register_uri_scheme_protocol("app", |_app, request| {
             if !paths::ready() {
                 return text_response(503, "Starting up — try again in a moment.");

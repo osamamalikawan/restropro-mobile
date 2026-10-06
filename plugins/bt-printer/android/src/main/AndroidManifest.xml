@@ -1,0 +1,10 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Android 11 and older: install-time permissions. -->
+    <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
+    <!-- Android 12+: runtime "Nearby devices" permission, needed to talk to an already-paired device.
+         We never scan, so BLUETOOTH_SCAN and location are deliberately not requested. -->
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <!-- Tablets/POS terminals without Bluetooth can still install the app (network printing works). -->
+    <uses-feature android:name="android.hardware.bluetooth" android:required="false" />
+</manifest>

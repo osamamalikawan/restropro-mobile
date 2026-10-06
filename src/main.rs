@@ -1,4 +1,4 @@
-// Desktop entry point. All app code lives in lib.rs so the same code also builds for Android.
+// Hide the console window on Windows release builds.
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 fn main() {

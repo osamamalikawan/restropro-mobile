@@ -1,7 +1,7 @@
 [package]
 name = "restropro-pos"
 version = "1.0.0"
-description = "Restro Pro POS — Windows + Android shell: offline-first sync and thermal printing"
+description = "Restro Pro POS - Windows + Android shell: offline-first sync and thermal printing"
 edition = "2021"
 
 [lib]
@@ -15,7 +15,7 @@ tauri-build = { version = "2", features = [] }
 tauri = { version = "2", features = [] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-# rustls instead of the default native-tls: native-tls needs OpenSSL, which is painful on Android.
+# rustls instead of native-tls: native-tls needs OpenSSL, which is painful on Android.
 reqwest = { version = "0.12", default-features = false, features = ["blocking", "json", "rustls-tls"] }
 sha2 = "0.10"
 zip = { version = "2", default-features = false, features = ["deflate"] }
@@ -31,6 +31,11 @@ nusb = "0.2"
 serialport = { version = "4", default-features = false }
 keyring = { version = "3", features = ["windows-native", "apple-native"] }
 
+# Android only: classic Bluetooth (SPP) printing, Kotlin + Rust. See plugins/bt-printer.
+[target.'cfg(target_os = "android")'.dependencies]
+tauri-plugin-bt-printer = { path = "plugins/bt-printer" }
+
+# Windows only: spooler printing
 [target.'cfg(windows)'.dependencies]
 windows = { version = "0.58", features = ["Win32_Graphics_Printing", "Win32_Graphics_Gdi", "Win32_Foundation", "Win32_Security"] }
 

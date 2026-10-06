@@ -1,0 +1,15 @@
+[package]
+name = "tauri-plugin-bt-printer"
+version = "0.1.0"
+description = "Classic Bluetooth (SPP/RFCOMM) raw printing for Restro Pro POS on Android"
+edition = "2021"
+links = "tauri-plugin-bt-printer"
+
+[dependencies]
+tauri = { version = "2" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+base64 = "0.22"
+
+[build-dependencies]
+tauri-plugin = { version = "2", features = ["build"] }
