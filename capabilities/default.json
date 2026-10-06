@@ -1,0 +1,20 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Capabilities for the main window, including remote-origin access to the printing commands",
+  "windows": ["main"],
+  "remote": {
+    "urls": ["https://restropro-eta.vercel.app/*"]
+  },
+  "permissions": [
+    "core:default",
+    { "identifier": "core:app:default" },
+    "allow-print-raw",
+    "allow-test-printer-connection",
+    "allow-list-windows-printers",
+    "allow-check-windows-printer",
+    "allow-print-raw-windows",
+    "allow-list-usb-printers",
+    "allow-print-raw-usb"
+  ]
+}
