@@ -23,6 +23,36 @@ jobs:
 
       - run: cargo install tauri-cli --version "^2" --locked
       - run: cargo tauri android init --ci
+
+      # Keeps the web view below the camera cutout and above the nav bar.
+      - name: Apply safe-area insets to MainActivity
+        run: |
+          f=$(find gen/android -name MainActivity.kt | head -n1)
+          pkg=$(grep -m1 '^package ' "$f")
+          cat > "$f" <<EOF2
+          $pkg
+
+          import android.os.Bundle
+          import android.view.View
+          import androidx.core.view.ViewCompat
+          import androidx.core.view.WindowInsetsCompat
+
+          class MainActivity : TauriActivity() {
+            override fun onCreate(savedInstanceState: Bundle?) {
+              super.onCreate(savedInstanceState)
+              val root = findViewById<View>(android.R.id.content)
+              ViewCompat.setOnApplyWindowInsetsListener(root) { v, insets ->
+                val bars = insets.getInsets(
+                  WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+                )
+                v.setPadding(bars.left, bars.top, bars.right, bars.bottom)
+                WindowInsetsCompat.CONSUMED
+              }
+            }
+          }
+          EOF2
+          cat "$f"
+
       - run: cargo tauri android build --apk --debug --target aarch64
 
       - uses: actions/upload-artifact@v4
